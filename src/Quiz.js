@@ -37,7 +37,7 @@ const Quiz = () => {
 
     window.speechSynthesis.onvoiceschanged = loadVoices;
     loadVoices();
-  }, []);
+  }, [setVoices]);
 
   // Selecciona una palabra al azar al cargar el componente
   useEffect(() => {
