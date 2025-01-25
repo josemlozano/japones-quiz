@@ -5,13 +5,14 @@ import words from "./words.json";
 const Quiz = () => {
   const [currentWord, setCurrentWord] = useState({});
   const [selectedOption, setSelectedOption] = useState(null);
-  const [setVoices] = useState([]);
+  const [showCorrectOption, setShowCorrectOption] = useState(false);
+  // const [voices, setVoices] = useState([]);
   const [japaneseVoice, setJapaneseVoice] = useState(null);
   const [audioAllowed, setAudioAllowed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [languages, setLanguages] = useState([]);
 
-  // Detectar si el usuario está en movil
+  // Detectar si el usuario está en móvil
   useEffect(() => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     const mobile = /android|iphone|ipad|ipod/i.test(userAgent);
@@ -26,7 +27,7 @@ const Quiz = () => {
   useEffect(() => {
     const loadVoices = () => {
       const availableVoices = window.speechSynthesis.getVoices();
-      setVoices(availableVoices);
+      // setVoices(availableVoices);
 
       const selected =
         availableVoices.find((v) => v.name === "Google 日本語 (ja-JP)") ||
@@ -37,7 +38,7 @@ const Quiz = () => {
 
     window.speechSynthesis.onvoiceschanged = loadVoices;
     loadVoices();
-  }, [setVoices]);
+  }, []);
 
   // Selecciona una palabra al azar al cargar el componente
   useEffect(() => {
@@ -50,6 +51,7 @@ const Quiz = () => {
     const randomIndex = Math.floor(Math.random() * words.length);
     setCurrentWord(words[randomIndex]);
     setSelectedOption(null); // Reinicia selección
+    setShowCorrectOption(false); // Oculta la opción correcta
   };
 
   const playAudio = () => {
@@ -75,7 +77,14 @@ const Quiz = () => {
   }, [currentWord, audioAllowed]);
 
   const handleOptionClick = (option) => {
-    setSelectedOption(option);
+    if (!selectedOption) {
+      setSelectedOption(option); // Solo permite seleccionar una opción una vez
+
+      // Si la opción es incorrecta, mostrar la correcta
+      if (!isCorrect(option)) {
+        setShowCorrectOption(true);
+      }
+    }
   };
 
   const isCorrect = (option) => option === currentWord.hiragana;
@@ -130,6 +139,7 @@ const Quiz = () => {
                 option={option}
                 isCorrect={isCorrect(option)}
                 isSelected={selectedOption === option}
+                showCorrect={showCorrectOption && isCorrect(option)}
                 onClick={() => handleOptionClick(option)}
               />
             ))}

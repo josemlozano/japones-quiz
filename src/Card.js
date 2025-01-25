@@ -1,9 +1,14 @@
 import React from "react";
 
-const Card = ({ option, isCorrect, isSelected, onClick }) => {
+const Card = ({ option, isCorrect, isSelected, showCorrect, onClick }) => {
   const getColor = () => {
-    if (!isSelected) return "white";
-    return isCorrect ? "green" : "red";
+    if (isSelected) {
+      return isCorrect ? "green" : "red";
+    }
+    if (showCorrect && isCorrect) {
+      return "green";
+    }
+    return "white";
   };
 
   return (
