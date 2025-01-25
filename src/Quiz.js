@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import Card from "./Card";
 import words from "./words.json";
+import Switch from "./Switch";
 
 const Quiz = () => {
   const [currentWord, setCurrentWord] = useState({});
   const [selectedOption, setSelectedOption] = useState(null);
   const [showCorrectOption, setShowCorrectOption] = useState(false);
-  // const [voices, setVoices] = useState([]);
   const [japaneseVoice, setJapaneseVoice] = useState(null);
   const [audioAllowed, setAudioAllowed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [languages, setLanguages] = useState([]);
+  const [soundEnabled, setSoundEnabled] = useState(true);
 
   // Detectar si el usuario está en móvil
   useEffect(() => {
@@ -27,7 +28,6 @@ const Quiz = () => {
   useEffect(() => {
     const loadVoices = () => {
       const availableVoices = window.speechSynthesis.getVoices();
-      // setVoices(availableVoices);
 
       const selected =
         availableVoices.find((v) => v.name === "Google 日本語 (ja-JP)") ||
@@ -55,8 +55,8 @@ const Quiz = () => {
   };
 
   const playAudio = () => {
-    if (!japaneseVoice) {
-      console.warn("No se encontró una voz japonesa disponible.");
+    if (!japaneseVoice || !soundEnabled) {
+      console.warn("No se encontró una voz japonesa disponible o el sonido está desactivado.");
       return;
     }
 
@@ -88,6 +88,10 @@ const Quiz = () => {
   };
 
   const isCorrect = (option) => option === currentWord.hiragana;
+
+  const handleSoundToggle = () => {
+    setSoundEnabled(!soundEnabled);
+  };
 
   return (
     <div>
@@ -122,9 +126,13 @@ const Quiz = () => {
         </div>
       ) : (
         <div>
-          {/* <h2 style={{ fontSize: "3rem", textAlign: "center" }}>
-            {currentWord.hiragana}
-          </h2> */}
+          <div style={{ textAlign: "center", marginTop: "20px" }}>
+            <label style={{ marginRight: "10px" }}>Sonido:</label>
+            <Switch onChange={handleSoundToggle} checked={soundEnabled} />
+          </div>
+          {!soundEnabled && ( 
+            <h2>{currentWord.romaji}</h2>
+          ) }
           <div
             style={{
               display: "grid",
@@ -152,9 +160,11 @@ const Quiz = () => {
               marginTop: "20px",
             }}
           >
-            <button onClick={playAudio} style={buttonStyle}>
-              Repetir audio
-            </button>
+            {!selectedOption && soundEnabled && (
+              <button onClick={playAudio} style={buttonStyle}>
+                Repetir audio
+              </button>
+            )}
             {selectedOption && (
               <button onClick={pickRandomWord} style={buttonStyle}>
                 Siguiente palabra
