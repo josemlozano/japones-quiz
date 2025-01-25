@@ -11,7 +11,7 @@ const Quiz = () => {
   const [isMobile, setIsMobile] = useState(false);
   const [languages, setLanguages] = useState([]);
 
-  // Detectar si el usuario está en móvil
+  // Detectar si el usuario está en movil
   useEffect(() => {
     const userAgent = navigator.userAgent || navigator.vendor || window.opera;
     const mobile = /android|iphone|ipad|ipod/i.test(userAgent);
