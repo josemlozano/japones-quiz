@@ -1,6 +1,5 @@
 import React from "react";
 import Quiz from "./Quiz";
-import VoiceTester from "./VoiceTester";
 
 function App() {
   return (

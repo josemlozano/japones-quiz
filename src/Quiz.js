@@ -5,7 +5,7 @@ import words from "./words.json";
 const Quiz = () => {
   const [currentWord, setCurrentWord] = useState({});
   const [selectedOption, setSelectedOption] = useState(null);
-  const [voices, setVoices] = useState([]);
+  const [setVoices] = useState([]);
   const [japaneseVoice, setJapaneseVoice] = useState(null);
   const [audioAllowed, setAudioAllowed] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
