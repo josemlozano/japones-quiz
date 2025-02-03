@@ -4,7 +4,7 @@ import words from "./words.json";
 import Switch from "./Switch";
 
 const Quiz = () => {
-  const [currentWord, setCurrentWord] = useState({});
+  const [currentWord, setCurrentWord] = useState(null); // Ahora puede ser null inicialmente
   const [selectedOption, setSelectedOption] = useState(null);
   const [showCorrectOption, setShowCorrectOption] = useState(false);
   const [japaneseVoice, setJapaneseVoice] = useState(null);
@@ -42,25 +42,30 @@ const Quiz = () => {
 
   // Selecciona una palabra al azar al cargar el componente
   useEffect(() => {
-    if (audioAllowed) {
+    // if (audioAllowed) {
       pickRandomWord();
-    }
+    // }
   }, [audioAllowed]);
 
   const pickRandomWord = () => {
-    const randomIndex = Math.floor(Math.random() * words.length);
-    setCurrentWord(words[randomIndex]);
-    setSelectedOption(null); // Reinicia selección
-    setShowCorrectOption(false); // Oculta la opción correcta
+    console.log(words)
+    console.log(words[0])
+    console.log(words[0].length)
+    console.log(words[0].hiragana)
+    console.log(words[0].hiragana.length)
+    const randomIndex = Math.floor(Math.random() * words[0].hiragana.length); // Acceder al array dentro del objeto
+    setCurrentWord(words[0].hiragana[randomIndex]); // Acceder al elemento correcto
+    setSelectedOption(null);
+    setShowCorrectOption(false);
   };
 
   const playAudio = () => {
-    if (!japaneseVoice || !soundEnabled) {
-      console.warn("No se encontró una voz japonesa disponible o el sonido está desactivado.");
+    if (!japaneseVoice || !soundEnabled || !currentWord) { // Comprobar si currentWord existe
+      console.warn("No se encontró una voz japonesa disponible, el sonido está desactivado o no hay palabra actual.");
       return;
     }
 
-    const utterance = new SpeechSynthesisUtterance(currentWord.hiragana);
+    const utterance = new SpeechSynthesisUtterance(currentWord.kana); // Usar currentWord.kana
     utterance.voice = japaneseVoice;
     utterance.lang = japaneseVoice.lang; // Idioma de la voz seleccionada
     utterance.rate = 0.1; // Velocidad ajustada
@@ -70,10 +75,10 @@ const Quiz = () => {
 
   // Reproducir el audio cuando cambie la palabra, si está permitido
   useEffect(() => {
-    if (audioAllowed && currentWord.hiragana) {
+    if (audioAllowed && currentWord) { // Comprobar si currentWord existe
       playAudio();
     }
-    // eslint-disable-next-line
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [currentWord, audioAllowed]);
 
   const handleOptionClick = (option) => {
@@ -87,11 +92,15 @@ const Quiz = () => {
     }
   };
 
-  const isCorrect = (option) => option === currentWord.hiragana;
+    const isCorrect = (option) => option === currentWord.kana;
 
   const handleSoundToggle = () => {
     setSoundEnabled(!soundEnabled);
   };
+
+  if (!currentWord) { // Mostrar mensaje mientras se carga la primera palabra
+    return <div style={{ textAlign: "center", marginTop: "50px" }}>Cargando...</div>;
+  }
 
   return (
     <div>
@@ -109,18 +118,7 @@ const Quiz = () => {
       )}
       {!audioAllowed ? (
         <div style={{ textAlign: "center", marginTop: "50px" }}>
-          <button
-            onClick={() => setAudioAllowed(true)}
-            style={{
-              padding: "10px 20px",
-              fontSize: "16px",
-              backgroundColor: "#4caf50",
-              color: "white",
-              border: "none",
-              borderRadius: "5px",
-              cursor: "pointer",
-            }}
-          >
+          <button onClick={() => setAudioAllowed(true)} style={buttonStyle}>
             Activar sonido y comenzar
           </button>
         </div>
@@ -130,9 +128,9 @@ const Quiz = () => {
             <label style={{ marginRight: "10px" }}>Sonido:</label>
             <Switch onChange={handleSoundToggle} checked={soundEnabled} />
           </div>
-          {!soundEnabled && ( 
+          {!soundEnabled && currentWord && ( // Verificar que currentWord existe antes de acceder a romaji
             <h2>{currentWord.romaji}</h2>
-          ) }
+          )}
           <div
             style={{
               display: "grid",

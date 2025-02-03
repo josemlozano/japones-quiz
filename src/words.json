@@ -1,50 +1,246 @@
 [
-  { "hiragana": "あい", "romaji": "ai", "options": ["うえ", "いぬ", "ねこ", "あい"] },
-  { "hiragana": "うえ", "romaji": "ue", "options": ["うえ", "した", "ひと", "あい"] },
-  { "hiragana": "いぬ", "romaji": "inu", "options": ["ねこ", "とり", "いぬ", "うま"] },
-  { "hiragana": "ねこ", "romaji": "neko", "options": ["さかな", "ねこ", "とり", "いぬ"] },
-  { "hiragana": "した", "romaji": "shita", "options": ["した", "あし", "ひと", "うえ"] },
-  { "hiragana": "ひと", "romaji": "hito", "options": ["やま", "かわ", "ひと", "くるま"] },
-  { "hiragana": "やま", "romaji": "yama", "options": ["やま", "そら", "かわ", "はな"] },
-  { "hiragana": "かわ", "romaji": "kawa", "options": ["うみ", "かわ", "もり", "やま"] },
-  { "hiragana": "そら", "romaji": "sora", "options": ["そら", "はな", "とり", "かわ"] },
-  { "hiragana": "はな", "romaji": "hana", "options": ["いえ", "はな", "うみ", "そら"] },
-  { "hiragana": "うみ", "romaji": "umi", "options": ["そら", "うみ", "くるま", "かわ"] },
-  { "hiragana": "もり", "romaji": "mori", "options": ["もり", "かわ", "とり", "やま"] },
-  { "hiragana": "くるま", "romaji": "kuruma", "options": ["くるま", "いぬ", "ひと", "ねこ"] },
-  { "hiragana": "とり", "romaji": "tori", "options": ["うみ", "とり", "もり", "さかな"] },
-  { "hiragana": "さかな", "romaji": "sakana", "options": ["かわ", "さかな", "とり", "うみ"] },
-  { "hiragana": "あし", "romaji": "ashi", "options": ["ねこ", "あし", "ひと", "した"] },
-  { "hiragana": "いえ", "romaji": "ie", "options": ["かわ", "いえ", "はな", "うみ"] },
-  { "hiragana": "みち", "romaji": "michi", "options": ["くるま", "みち", "やま", "ひと"] },
-  { "hiragana": "あめ", "romaji": "ame", "options": ["そら", "あめ", "かわ", "はな"] },
-  { "hiragana": "くも", "romaji": "kumo", "options": ["そら", "くも", "やま", "うみ"] },
-  { "hiragana": "ひる", "romaji": "hiru", "options": ["ひる", "よる", "あさ", "とき"] },
-  { "hiragana": "あさ", "romaji": "asa", "options": ["よる", "あさ", "くも", "ひる"] },
-  { "hiragana": "よる", "romaji": "yoru", "options": ["あさ", "よる", "そら", "ひる"] },
-  { "hiragana": "とき", "romaji": "toki", "options": ["ひる", "とき", "そら", "あさ"] },
-  { "hiragana": "ひ", "romaji": "hi", "options": ["つき", "ひ", "くも", "やま"] },
-  { "hiragana": "つき", "romaji": "tsuki", "options": ["ひ", "そら", "つき", "かわ"] },
-  { "hiragana": "ほし", "romaji": "hoshi", "options": ["つき", "ほし", "そら", "ひ"] },
-  { "hiragana": "なみ", "romaji": "nami", "options": ["なみ", "かわ", "うみ", "そら"] },
-  { "hiragana": "かぜ", "romaji": "kaze", "options": ["かぜ", "やま", "そら", "くも"] },
-  { "hiragana": "もん", "romaji": "mon", "options": ["みち", "もん", "はな", "いえ"] },
-  { "hiragana": "たび", "romaji": "tabi", "options": ["くるま", "たび", "もり", "みち"] },
-  { "hiragana": "おかね", "romaji": "okane", "options": ["たび", "くるま", "おかね", "いえ"] },
-  { "hiragana": "ほん", "romaji": "hon", "options": ["いぬ", "ほん", "やま", "とり"] },
-  { "hiragana": "え", "romaji": "e", "options": ["ほん", "そら", "はな", "え"] },
-  { "hiragana": "じかん", "romaji": "jikan", "options": ["じかん", "とき", "あさ", "ひる"] },
-  { "hiragana": "ともだち", "romaji": "tomodachi", "options": ["ひと", "ともだち", "いぬ", "くるま"] },
-  { "hiragana": "がっこう", "romaji": "gakkou", "options": ["がっこう", "もり", "いえ", "ほん"] },
-  { "hiragana": "せんせい", "romaji": "sensei", "options": ["ともだち", "ひと", "せんせい", "がっこう"] },
-  { "hiragana": "でんわ", "romaji": "denwa", "options": ["ほん", "いえ", "でんわ", "くるま"] },
-  { "hiragana": "き", "romaji": "ki", "options": ["かわ", "き", "もり", "はな"] },
-  { "hiragana": "ひこうき", "romaji": "hikouki", "options": ["みち", "ひこうき", "そら", "くるま"] },
-  { "hiragana": "えき", "romaji": "eki", "options": ["えき", "たび", "みち", "いえ"] },
-  { "hiragana": "て", "romaji": "te", "options": ["て", "ひと", "あし", "いぬ"] },
-  { "hiragana": "みみ", "romaji": "mimi", "options": ["て", "みみ", "ねこ", "ひと"] },
-  { "hiragana": "はな", "romaji": "hana", "options": ["はな", "くち", "みみ", "て"] },
-  { "hiragana": "くち", "romaji": "kuchi", "options": ["みみ", "はな", "くち", "あし"] },
-  { "hiragana": "ゆめ", "romaji": "yume", "options": ["つき", "ゆめ", "ほし", "そら"] },
-  { "hiragana": "まち", "romaji": "machi", "options": ["まち", "みち", "がっこう", "いえ"] }
+    {
+        "hiragana": [
+            {
+                "kana": "あい",
+                "romaji": "ai",
+                "options": ["うえ", "いぬ", "ねこ", "あい"]
+            },
+            {
+                "kana": "うえ",
+                "romaji": "ue",
+                "options": ["うえ", "した", "ひと", "あい"]
+            },
+            {
+                "kana": "いぬ",
+                "romaji": "inu",
+                "options": ["ねこ", "とり", "いぬ", "うま"]
+            },
+            {
+                "kana": "ねこ",
+                "romaji": "neko",
+                "options": ["さかな", "ねこ", "とり", "いぬ"]
+            },
+            {
+                "kana": "した",
+                "romaji": "shita",
+                "options": ["した", "あし", "ひと", "うえ"]
+            },
+            {
+                "kana": "ひと",
+                "romaji": "hito",
+                "options": ["やま", "かわ", "ひと", "くるま"]
+            },
+            {
+                "kana": "やま",
+                "romaji": "yama",
+                "options": ["やま", "そら", "かわ", "はな"]
+            },
+            {
+                "kana": "かわ",
+                "romaji": "kawa",
+                "options": ["うみ", "かわ", "もり", "やま"]
+            },
+            {
+                "kana": "そら",
+                "romaji": "sora",
+                "options": ["そら", "はな", "とり", "かわ"]
+            },
+            {
+                "kana": "はな",
+                "romaji": "hana",
+                "options": ["いえ", "はな", "うみ", "そら"]
+            },
+            {
+                "kana": "うみ",
+                "romaji": "umi",
+                "options": ["そら", "うみ", "くるま", "かわ"]
+            },
+            {
+                "kana": "もり",
+                "romaji": "mori",
+                "options": ["もり", "かわ", "とり", "やま"]
+            },
+            {
+                "kana": "くるま",
+                "romaji": "kuruma",
+                "options": ["くるま", "いぬ", "ひと", "ねこ"]
+            },
+            {
+                "kana": "とり",
+                "romaji": "tori",
+                "options": ["うみ", "とり", "もり", "さかな"]
+            },
+            {
+                "kana": "さかな",
+                "romaji": "sakana",
+                "options": ["かわ", "さかな", "とり", "うみ"]
+            },
+            {
+                "kana": "あし",
+                "romaji": "ashi",
+                "options": ["ねこ", "あし", "ひと", "した"]
+            },
+            {
+                "kana": "いえ",
+                "romaji": "ie",
+                "options": ["かわ", "いえ", "はな", "うみ"]
+            },
+            {
+                "kana": "みち",
+                "romaji": "michi",
+                "options": ["くるま", "みち", "やま", "ひと"]
+            },
+            {
+                "kana": "あめ",
+                "romaji": "ame",
+                "options": ["そら", "あめ", "かわ", "はな"]
+            },
+            {
+                "kana": "くも",
+                "romaji": "kumo",
+                "options": ["そら", "くも", "やま", "うみ"]
+            },
+            {
+                "kana": "ひる",
+                "romaji": "hiru",
+                "options": ["ひる", "よる", "あさ", "とき"]
+            },
+            {
+                "kana": "あさ",
+                "romaji": "asa",
+                "options": ["よる", "あさ", "くも", "ひる"]
+            },
+            {
+                "kana": "よる",
+                "romaji": "yoru",
+                "options": ["あさ", "よる", "そら", "ひる"]
+            },
+            {
+                "kana": "とき",
+                "romaji": "toki",
+                "options": ["ひる", "とき", "そら", "あさ"]
+            },
+            {
+                "kana": "ひ",
+                "romaji": "hi",
+                "options": ["つき", "ひ", "くも", "やま"]
+            },
+            {
+                "kana": "つき",
+                "romaji": "tsuki",
+                "options": ["ひ", "そら", "つき", "かわ"]
+            },
+            {
+                "kana": "ほし",
+                "romaji": "hoshi",
+                "options": ["つき", "ほし", "そら", "ひ"]
+            },
+            {
+                "kana": "なみ",
+                "romaji": "nami",
+                "options": ["なみ", "かわ", "うみ", "そら"]
+            },
+            {
+                "kana": "かぜ",
+                "romaji": "kaze",
+                "options": ["かぜ", "やま", "そら", "くも"]
+            },
+            {
+                "kana": "もん",
+                "romaji": "mon",
+                "options": ["みち", "もん", "はな", "いえ"]
+            },
+            {
+                "kana": "たび",
+                "romaji": "tabi",
+                "options": ["くるま", "たび", "もり", "みち"]
+            },
+            {
+                "kana": "おかね",
+                "romaji": "okane",
+                "options": ["たび", "くるま", "おかね", "いえ"]
+            },
+            {
+                "kana": "ほん",
+                "romaji": "hon",
+                "options": ["いぬ", "ほん", "やま", "とり"]
+            },
+            {
+                "kana": "え",
+                "romaji": "e",
+                "options": ["ほん", "そら", "はな", "え"]
+            },
+            {
+                "kana": "じかん",
+                "romaji": "jikan",
+                "options": ["じかん", "とき", "あさ", "ひる"]
+            },
+            {
+                "kana": "ともだち",
+                "romaji": "tomodachi",
+                "options": ["ひと", "ともだち", "いぬ", "くるま"]
+            },
+            {
+                "kana": "がっこう",
+                "romaji": "gakkou",
+                "options": ["がっこう", "もり", "いえ", "ほん"]
+            },
+            {
+                "kana": "せんせい",
+                "romaji": "sensei",
+                "options": ["ともだち", "ひと", "せんせい", "がっこう"]
+            },
+            {
+                "kana": "でんわ",
+                "romaji": "denwa",
+                "options": ["ほん", "いえ", "でんわ", "くるま"]
+            },
+            {
+                "kana": "き",
+                "romaji": "ki",
+                "options": ["かわ", "き", "もり", "はな"]
+            },
+            {
+                "kana": "ひこうき",
+                "romaji": "hikouki",
+                "options": ["みち", "ひこうき", "そら", "くるま"]
+            },
+            {
+                "kana": "えき",
+                "romaji": "eki",
+                "options": ["えき", "たび", "みち", "いえ"]
+            },
+            {
+                "kana": "て",
+                "romaji": "te",
+                "options": ["て", "ひと", "あし", "いぬ"]
+            },
+            {
+                "kana": "みみ",
+                "romaji": "mimi",
+                "options": ["て", "みみ", "ねこ", "ひと"]
+            },
+            {
+                "kana": "はな",
+                "romaji": "hana",
+                "options": ["はな", "くち", "みみ", "て"]
+            },
+            {
+                "kana": "くち",
+                "romaji": "kuchi",
+                "options": ["みみ", "はな", "くち", "あし"]
+            },
+            {
+                "kana": "ゆめ",
+                "romaji": "yume",
+                "options": ["つき", "ゆめ", "ほし", "そら"]
+            },
+            {
+                "kana": "まち",
+                "romaji": "machi",
+                "options": ["まち", "みち", "がっこう", "いえ"]
+            }
+        ]
+    }
 ]
