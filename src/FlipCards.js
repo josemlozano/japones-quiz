@@ -9,6 +9,9 @@ const FlipCards = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [startTime, setStartTime] = useState(null);
   const [finished, setFinished] = useState(false);
+  const [customData, setCustomData] = useState("");
+  const [useCustomData, setUseCustomData] = useState(false);
+  const [sortConfig, setSortConfig] = useState({ key: null, direction: 'ascending' });
 
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
@@ -60,12 +63,70 @@ const FlipCards = () => {
     }
   };
 
+  const handleCustomDataSubmit = () => {
+    const customEntries = customData.split("\n").map((line) => {
+      const [hiragana, romaji] = line.includes("→") ? line.split(" → ") : line.split(": ");
+      return { hiragana, romaji };
+    });
+    setData(shuffleArray(customEntries));
+    setUseCustomData(true);
+    setStartTime(Date.now());
+    setCustomData(""); // Limpiar el campo de texto
+  };
+
+  const handleRestart = () => {
+    setFinished(false);
+    setCurrentIndex(0);
+    setStartTime(Date.now());
+    if (useCustomData) {
+      handleCustomDataSubmit();
+    } else {
+      const fetchData = async () => {
+        const { jsonData } = await loadKanaData();
+
+        if (jsonData[kanaType]) {
+          const kanaData = Object.entries(jsonData[kanaType]).map(([kana, romaji]) => ({
+            hiragana: kana,
+            romaji,
+          }));
+          setData(shuffleArray(kanaData));
+        }
+      };
+
+      fetchData();
+    }
+  };
+
+  const requestSort = (key) => {
+    let direction = 'ascending';
+    if (sortConfig.key === key && sortConfig.direction === 'ascending') {
+      direction = 'descending';
+    }
+    setSortConfig({ key, direction });
+  };
+
+  const sortedData = React.useMemo(() => {
+    let sortableData = [...data];
+    if (sortConfig.key !== null) {
+      sortableData.sort((a, b) => {
+        if (a[sortConfig.key] < b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? -1 : 1;
+        }
+        if (a[sortConfig.key] > b[sortConfig.key]) {
+          return sortConfig.direction === 'ascending' ? 1 : -1;
+        }
+        return 0;
+      });
+    }
+    return sortableData;
+  }, [data, sortConfig]);
+
   return (
     <div className="flipcards-container">
       <h1>Flashcards de Kana</h1>
 
       <label>Selecciona el tipo de Kana: </label>
-      <select value={kanaType} onChange={(e) => setKanaType(e.target.value)}>
+      <select value={kanaType} onChange={(e) => setKanaType(e.target.value)} disabled={useCustomData}>
         {availableOptions.map((option) => (
           <option key={option} value={option}>
             {option}
@@ -73,20 +134,32 @@ const FlipCards = () => {
         ))}
       </select>
 
+      <div style={{ marginTop: "20px" }}>
+        <textarea
+          value={customData}
+          onChange={(e) => setCustomData(e.target.value)}
+          placeholder="Ingresa tus datos personalizados aquí (ej. おきます → Despertar o おきます: Despertar)"
+          rows="4"
+          cols="50"
+        />
+        <br />
+        <button onClick={handleCustomDataSubmit}>Usar datos personalizados</button>
+      </div>
+
       {finished ? (
         <div>
           <h2>Resultados</h2>
           <table>
             <thead>
               <tr>
-                <th>Kana</th>
-                <th>Romaji</th>
-                <th>Correcto</th>
-                <th>Tiempo (s)</th>
+                <th onClick={() => requestSort('hiragana')}>Kana</th>
+                <th onClick={() => requestSort('romaji')}>Romaji</th>
+                <th onClick={() => requestSort('correct')}>Correcto</th>
+                <th onClick={() => requestSort('timeTaken')}>Tiempo (s)</th>
               </tr>
             </thead>
             <tbody>
-              {data.map((item, index) => (
+              {sortedData.map((item, index) => (
                 <tr key={index}>
                   <td>{item.hiragana}</td>
                   <td>{item.romaji}</td>
@@ -96,6 +169,9 @@ const FlipCards = () => {
               ))}
             </tbody>
           </table>
+          <button onClick={handleRestart} style={{ marginTop: "20px" }}>
+            Empezar de nuevo
+          </button>
         </div>
       ) : data.length > 0 ? (
         <Card
