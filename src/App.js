@@ -1,42 +1,72 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import FlipCards from "./FlipCards";
+import SideMenu from "./SideMenu";
+import Switchy from "./Switchy";
 
 function App() {
-  const [mode, setMode] = useState("flipcards"); // Estado por defecto en "flipcards"
+  const [menuVisible, setMenuVisible] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState(null); // Estado para la categoría seleccionada
+
+  const menuRef = useRef(null);
+  const switchRef = useRef(null);
+
+  const handleToggleMenu = () => {
+    setMenuVisible((v) => !v);
+  };
+
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category); // Actualiza la categoría seleccionada
+    setMenuVisible(false); // Cierra el menú después de seleccionar
+  };
+
+  useEffect(() => {
+    function handleClickOutside(event) {
+      if (
+        menuVisible &&
+        menuRef.current &&
+        !menuRef.current.contains(event.target) &&
+        switchRef.current &&
+        !switchRef.current.contains(event.target)
+      ) {
+        setMenuVisible(false);
+      }
+    }
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, [menuVisible]);
 
   return (
-    <div style={{ textAlign: "center", padding: "20px" }}>
-      <h1>Hiragana Quiz</h1>
-
-      {/* Selector de modo */}
-      <div>
-        {/* 
-        <label>
-          <input
-            type="radio"
-            name="mode"
-            value="quiz"
-            checked={mode === "quiz"}
-            onChange={() => setMode("quiz")}
-          />
-          Quiz
-        </label>
-        */}
-
-        <label>
-          <input
-            type="radio"
-            name="mode"
-            value="flipcards"
-            checked={mode === "flipcards"}
-            onChange={() => setMode("flipcards")}
-          />
-          FlipCards
-        </label>
+    <div style={{ display: "flex" }}>
+      {/* Switch para abrir/cerrar menú */}
+      <div
+        ref={switchRef}
+        style={{ position: "fixed", top: "10px", left: "10px", zIndex: 1000 }}
+      >
+        <Switchy
+          checked={menuVisible}
+          onChange={handleToggleMenu}
+          inputRef={switchRef}
+        />
       </div>
 
-      {/* Renderizado condicional */}
-      <FlipCards />
+      {/* SideMenu */}
+      {menuVisible && (
+        <div ref={menuRef}>
+          <SideMenu onCategorySelect={handleCategorySelect} />
+        </div>
+      )}
+
+      <div
+        style={{
+          marginLeft: menuVisible ? "220px" : "0",
+          padding: "20px",
+          width: "100%",
+        }}
+      >
+        <h1 style={{paddingTop:"50px"}}>Flip cards</h1>
+        <FlipCards selectedCategory={selectedCategory} /> {/* Pasa la categoría seleccionada */}
+      </div>
     </div>
   );
 }
