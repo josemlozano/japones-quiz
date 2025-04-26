@@ -134,7 +134,7 @@ const FlipCards = () => {
         ))}
       </select>
 
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ marginTop: "20px", display: "none"}}>
         <textarea
           value={customData}
           onChange={(e) => setCustomData(e.target.value)}
