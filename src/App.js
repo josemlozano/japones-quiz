@@ -1,9 +1,8 @@
 import React, { useState } from "react";
-import Quiz from "./Quiz";
 import FlipCards from "./FlipCards";
 
 function App() {
-  const [mode, setMode] = useState("quiz"); // Estado para seleccionar el modo
+  const [mode, setMode] = useState("flipcards"); // Estado por defecto en "flipcards"
 
   return (
     <div style={{ textAlign: "center", padding: "20px" }}>
@@ -11,6 +10,7 @@ function App() {
 
       {/* Selector de modo */}
       <div>
+        {/* 
         <label>
           <input
             type="radio"
@@ -21,8 +21,9 @@ function App() {
           />
           Quiz
         </label>
+        */}
 
-        <label style={{ marginLeft: "20px" }}>
+        <label>
           <input
             type="radio"
             name="mode"
@@ -35,7 +36,7 @@ function App() {
       </div>
 
       {/* Renderizado condicional */}
-      {mode === "quiz" ? <Quiz /> : <FlipCards />}
+      <FlipCards />
     </div>
   );
 }
