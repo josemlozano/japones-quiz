@@ -22,6 +22,7 @@
       "react-app/jest"
     ]
   },
+  "proxy": "https://d1.global-polluelo5v.workers.dev",
   "browserslist": {
     "production": [
       ">0.2%",

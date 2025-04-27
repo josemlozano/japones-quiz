@@ -30,6 +30,13 @@ const SideMenu = ({ onCategorySelect }) => {
             {category}
           </li>
         ))}
+        {/* Nueva opción para "quiz-particulas" */}
+        <li
+          style={itemStyle}
+          onClick={() => onCategorySelect("quiz-particulas")}
+        >
+          Quiz Partículas
+        </li>
       </ul>
     </div>
   );

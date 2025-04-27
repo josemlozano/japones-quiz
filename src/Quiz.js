@@ -1,190 +1,99 @@
 import React, { useState, useEffect } from "react";
-import Card from "./Card";
-import words from "./words.json";
-import Switch from "./Switch";
+import QuizApi from "./api/QuizApi"; // Importar la clase QuizApi
 
 const Quiz = () => {
-  const [currentWord, setCurrentWord] = useState({});
+  const [questions, setQuestions] = useState([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [showCorrectOption, setShowCorrectOption] = useState(false);
-  const [japaneseVoice, setJapaneseVoice] = useState(null);
-  const [audioAllowed, setAudioAllowed] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-  const [languages, setLanguages] = useState([]);
-  const [soundEnabled, setSoundEnabled] = useState(true);
+  const [score, setScore] = useState(0);
+  const [shuffledOptions, setShuffledOptions] = useState([]); // Estado para las opciones mezcladas
 
-  // Detectar si el usuario está en móvil
   useEffect(() => {
-    const userAgent = navigator.userAgent || navigator.vendor || window.opera;
-    const mobile = /android|iphone|ipad|ipod/i.test(userAgent);
-    setIsMobile(mobile);
-
-    if (mobile) {
-      setLanguages(navigator.languages);
-    }
-  }, []);
-
-  // Cargar voces disponibles y seleccionar la voz japonesa
-  useEffect(() => {
-    const loadVoices = () => {
-      const availableVoices = window.speechSynthesis.getVoices();
-
-      const selected =
-        availableVoices.find((v) => v.name === "Google 日本語 (ja-JP)") ||
-        availableVoices.find((v) => v.lang.startsWith("ja"));
-
-      setJapaneseVoice(selected || null);
+    const fetchQuestions = async () => {
+      try {
+        const data = await QuizApi.fetchQuestions(); // Llamar a la API usando la clase
+        setQuestions(data);
+      } catch (error) {
+        console.error("Error al cargar las preguntas:", error);
+      }
     };
 
-    window.speechSynthesis.onvoiceschanged = loadVoices;
-    loadVoices();
+    fetchQuestions();
   }, []);
 
-  // Selecciona una palabra al azar al cargar el componente
   useEffect(() => {
-    if (audioAllowed) {
-      pickRandomWord();
+    if (questions.length > 0) {
+      const currentQuestion = questions[currentQuestionIndex];
+      const options = [
+        currentQuestion.particula_correcta,
+        currentQuestion.opcion_incorrecta_1,
+        currentQuestion.opcion_incorrecta_2,
+        currentQuestion.opcion_incorrecta_3,
+      ];
+      setShuffledOptions(options.sort(() => Math.random() - 0.5)); // Mezclar opciones solo una vez por pregunta
     }
-  }, [audioAllowed]);
-
-  const pickRandomWord = () => {
-    const randomIndex = Math.floor(Math.random() * words.length);
-    setCurrentWord(words[randomIndex]);
-    setSelectedOption(null); // Reinicia selección
-    setShowCorrectOption(false); // Oculta la opción correcta
-  };
-
-  const playAudio = () => {
-    if (!japaneseVoice || !soundEnabled) {
-      console.warn("No se encontró una voz japonesa disponible o el sonido está desactivado.");
-      return;
-    }
-
-    const utterance = new SpeechSynthesisUtterance(currentWord.hiragana);
-    utterance.voice = japaneseVoice;
-    utterance.lang = japaneseVoice.lang; // Idioma de la voz seleccionada
-    utterance.rate = 0.1; // Velocidad ajustada
-    utterance.pitch = 1; // Tono neutral
-    speechSynthesis.speak(utterance);
-  };
-
-  // Reproducir el audio cuando cambie la palabra, si está permitido
-  useEffect(() => {
-    if (audioAllowed && currentWord.hiragana) {
-      playAudio();
-    }
-    // eslint-disable-next-line
-  }, [currentWord, audioAllowed]);
+  }, [questions, currentQuestionIndex]);
 
   const handleOptionClick = (option) => {
     if (!selectedOption) {
-      setSelectedOption(option); // Solo permite seleccionar una opción una vez
+      setSelectedOption(option);
 
-      // Si la opción es incorrecta, mostrar la correcta
-      if (!isCorrect(option)) {
-        setShowCorrectOption(true);
+      if (option === questions[currentQuestionIndex].particula_correcta) {
+        setScore((prevScore) => prevScore + 1);
       }
     }
   };
 
-  const isCorrect = (option) => option === currentWord.hiragana;
-
-  const handleSoundToggle = () => {
-    setSoundEnabled(!soundEnabled);
+  const handleNextQuestion = () => {
+    setSelectedOption(null);
+    setCurrentQuestionIndex((prevIndex) => prevIndex + 1);
   };
+
+  if (questions.length === 0) {
+    return <p>Cargando preguntas...</p>;
+  }
+
+  const currentQuestion = questions[currentQuestionIndex];
 
   return (
     <div>
-      {isMobile && (
-        <div>
-          <label htmlFor="languages">Selecciona un idioma:</label>
-          <select id="languages">
-            {languages.map((lang, index) => (
-              <option key={index} value={lang}>
-                {lang}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
-      {!audioAllowed ? (
-        <div style={{ textAlign: "center", marginTop: "50px" }}>
+      <h2>Pregunta {currentQuestionIndex + 1} de {questions.length}</h2>
+      <p>{currentQuestion.frase}</p>
+      <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+        {shuffledOptions.map((option, index) => (
           <button
-            onClick={() => setAudioAllowed(true)}
+            key={index}
+            onClick={() => handleOptionClick(option)}
             style={{
-              padding: "10px 20px",
-              fontSize: "16px",
-              backgroundColor: "#4caf50",
-              color: "white",
-              border: "none",
+              padding: "10px",
+              backgroundColor: selectedOption === option
+                ? option === currentQuestion.particula_correcta
+                  ? "green"
+                  : "red"
+                : "white",
+              border: selectedOption && option === currentQuestion.particula_correcta
+                ? "2px solid green" // Resaltar la opción correcta con borde verde
+                : "1px solid #ddd",
               borderRadius: "5px",
               cursor: "pointer",
             }}
           >
-            Activar sonido y comenzar
+            {option}
           </button>
-        </div>
-      ) : (
+        ))}
+      </div>
+      {selectedOption && (
+        <button onClick={handleNextQuestion} style={{ marginTop: "20px" }}>
+          Siguiente
+        </button>
+      )}
+      {currentQuestionIndex === questions.length - 1 && selectedOption && (
         <div>
-          <div style={{ textAlign: "center", marginTop: "20px" }}>
-            <label style={{ marginRight: "10px" }}>Sonido:</label>
-            <Switch onChange={handleSoundToggle} checked={soundEnabled} />
-          </div>
-          {!soundEnabled && ( 
-            <h2>{currentWord.romaji}</h2>
-          ) }
-          <div
-            style={{
-              display: "grid",
-              gridTemplateColumns: "1fr 1fr",
-              gap: "20px",
-              justifyContent: "center",
-            }}
-          >
-            {currentWord.options?.map((option, index) => (
-              <Card
-                key={index}
-                option={option}
-                isCorrect={isCorrect(option)}
-                isSelected={selectedOption === option}
-                showCorrect={showCorrectOption && isCorrect(option)}
-                onClick={() => handleOptionClick(option)}
-              />
-            ))}
-          </div>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              gap: "10px",
-              marginTop: "20px",
-            }}
-          >
-            {!selectedOption && soundEnabled && (
-              <button onClick={playAudio} style={buttonStyle}>
-                Repetir audio
-              </button>
-            )}
-            {selectedOption && (
-              <button onClick={pickRandomWord} style={buttonStyle}>
-                Siguiente palabra
-              </button>
-            )}
-          </div>
+          <h3>Tu puntuación: {score} / {questions.length}</h3>
         </div>
       )}
     </div>
   );
-};
-
-const buttonStyle = {
-  padding: "10px 20px",
-  fontSize: "16px",
-  backgroundColor: "#007bff",
-  color: "white",
-  border: "none",
-  borderRadius: "5px",
-  cursor: "pointer",
 };
 
 export default Quiz;

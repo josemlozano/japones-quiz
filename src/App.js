@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from "react";
 import FlipCards from "./FlipCards";
 import SideMenu from "./SideMenu";
+import Quiz from "./Quiz"; // Importar el componente Quiz
 import Switchy from "./Switchy";
 
 function App() {
@@ -64,8 +65,12 @@ function App() {
           width: "100%",
         }}
       >
-        <h1 style={{paddingTop:"50px"}}>Flip cards</h1>
-        <FlipCards selectedCategory={selectedCategory} /> {/* Pasa la categoría seleccionada */}
+        <h1 style={{ paddingTop: "50px" }}>Hiragana Quiz</h1>
+        {selectedCategory === "quiz-particulas" ? (
+          <Quiz /> // Renderiza el componente Quiz
+        ) : (
+          <FlipCards selectedCategory={selectedCategory} /> // Renderiza FlipCards
+        )}
       </div>
     </div>
   );
