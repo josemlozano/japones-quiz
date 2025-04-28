@@ -63,9 +63,10 @@ function App() {
           marginLeft: menuVisible ? "220px" : "0",
           padding: "20px",
           width: "100%",
+          paddingTop: "50px"
         }}
       >
-        <h1 style={{ paddingTop: "50px" }}>Hiragana Quiz</h1>
+        {/* <h1 style={{ paddingTop: "50px" }}></h1> */}
         {selectedCategory === "quiz-particulas" ? (
           <Quiz /> // Renderiza el componente Quiz
         ) : (
