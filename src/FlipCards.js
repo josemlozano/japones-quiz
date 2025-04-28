@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import Card from "./components/Card";
 
-const FlipCards = ({ selectedCategory }) => {
+const FlipCards = () => {
+  const { category } = useParams(); // Obtener la categoría desde la URL
   const [data, setData] = useState([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [finished, setFinished] = useState(false);
 
-  // Función para mezclar los datos de forma aleatoria
   const shuffleArray = (array) => {
     for (let i = array.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -21,15 +22,17 @@ const FlipCards = ({ selectedCategory }) => {
         const response = await fetch("/data/vocabulario.json");
         const jsonData = await response.json();
 
-        if (selectedCategory && jsonData[selectedCategory]) {
-          const categoryData = Object.entries(jsonData[selectedCategory]).map(
+        if (category && jsonData[category]) {
+          const categoryData = Object.entries(jsonData[category]).map(
             ([key, value]) => ({
               hiragana: key,
               romaji: value,
-              correct: null, // Inicializa el estado de corrección
+              correct: null, // Reinicia el estado de corrección
             })
           );
-          setData(shuffleArray(categoryData)); // Mezclar los datos antes de establecerlos
+          setData(shuffleArray(categoryData)); // Mezcla las tarjetas
+          setCurrentIndex(0); // Reinicia el índice actual
+          setFinished(false); // Reinicia el estado de finalización
         }
       } catch (error) {
         console.error("Error al cargar los datos:", error);
@@ -37,11 +40,11 @@ const FlipCards = ({ selectedCategory }) => {
     };
 
     fetchData();
-  }, [selectedCategory]);
+  }, [category]); // Se ejecuta cada vez que cambia la categoría
 
   const handleAnswer = (isCorrect) => {
     const updatedData = [...data];
-    updatedData[currentIndex].correct = isCorrect ? "✔" : "✖"; // Actualiza si la respuesta fue correcta o no
+    updatedData[currentIndex].correct = isCorrect ? "✔" : "✖";
 
     if (currentIndex + 1 < data.length) {
       setCurrentIndex((prev) => prev + 1);
@@ -53,11 +56,11 @@ const FlipCards = ({ selectedCategory }) => {
   const handleRestart = () => {
     setFinished(false);
     setCurrentIndex(0);
-    setData(shuffleArray(data)); // Mezclar los datos al reiniciar
+    setData(shuffleArray(data));
   };
 
   return (
-    <div>
+    <div style={{ paddingTop: "30px" }}>
       {finished ? (
         <div>
           <h2>Resultados</h2>
@@ -90,7 +93,7 @@ const FlipCards = ({ selectedCategory }) => {
           onAnswer={handleAnswer}
         />
       ) : (
-        <p>Selecciona una categoría para comenzar.</p>
+        <p>Cargando datos...</p>
       )}
     </div>
   );

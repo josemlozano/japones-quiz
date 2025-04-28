@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
-const SideMenu = ({ onCategorySelect }) => {
+const SideMenu = ({ onOptionClick }) => {
   const [categories, setCategories] = useState([]);
 
   useEffect(() => {
@@ -22,20 +23,24 @@ const SideMenu = ({ onCategorySelect }) => {
       <h2>Categorías</h2>
       <ul style={listStyle}>
         {categories.map((category, index) => (
-          <li
-            key={index}
-            style={itemStyle}
-            onClick={() => onCategorySelect(category)} // Llama a la función al hacer clic
-          >
-            {category}
+          <li key={index} style={itemStyle}>
+            <Link
+              to={`/flipcards/${category}`}
+              style={linkStyle}
+              onClick={onOptionClick} // Cierra el menú al hacer clic
+            >
+              {category}
+            </Link>
           </li>
         ))}
-        {/* Nueva opción para "quiz-particulas" */}
-        <li
-          style={itemStyle}
-          onClick={() => onCategorySelect("quiz-particulas")}
-        >
-          Quiz Partículas
+        <li style={itemStyle}>
+          <Link
+            to="/quiz-particulas"
+            style={linkStyle}
+            onClick={onOptionClick} // Cierra el menú al hacer clic
+          >
+            Quiz Partículas
+          </Link>
         </li>
       </ul>
     </div>
@@ -65,6 +70,11 @@ const itemStyle = {
   cursor: "pointer",
   borderBottom: "1px solid #ddd",
   transition: "background-color 0.3s",
+};
+
+const linkStyle = {
+  textDecoration: "none",
+  color: "black",
 };
 
 export default SideMenu;

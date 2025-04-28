@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import FlipCards from "./FlipCards";
 import SideMenu from "./SideMenu";
 import Quiz from "./Quiz"; // Importar el componente Quiz
@@ -6,7 +7,6 @@ import Switchy from "./Switchy";
 
 function App() {
   const [menuVisible, setMenuVisible] = useState(false);
-  const [selectedCategory, setSelectedCategory] = useState(null); // Estado para la categoría seleccionada
 
   const menuRef = useRef(null);
   const switchRef = useRef(null);
@@ -15,9 +15,8 @@ function App() {
     setMenuVisible((v) => !v);
   };
 
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category); // Actualiza la categoría seleccionada
-    setMenuVisible(false); // Cierra el menú después de seleccionar
+  const handleCloseMenu = () => {
+    setMenuVisible(false); // Cierra el menú
   };
 
   useEffect(() => {
@@ -38,42 +37,42 @@ function App() {
   }, [menuVisible]);
 
   return (
-    <div style={{ display: "flex" }}>
-      {/* Switch para abrir/cerrar menú */}
-      <div
-        ref={switchRef}
-        style={{ position: "fixed", top: "10px", left: "10px", zIndex: 1000 }}
-      >
-        <Switchy
-          checked={menuVisible}
-          onChange={handleToggleMenu}
-          inputRef={switchRef}
-        />
-      </div>
-
-      {/* SideMenu */}
-      {menuVisible && (
-        <div ref={menuRef}>
-          <SideMenu onCategorySelect={handleCategorySelect} />
+    <Router>
+      <div style={{ display: "flex" }}>
+        {/* Switch para abrir/cerrar menú */}
+        <div
+          ref={switchRef}
+          style={{ position: "fixed", top: "10px", left: "10px", zIndex: 1000 }}
+        >
+          <Switchy
+            checked={menuVisible}
+            onChange={handleToggleMenu}
+            inputRef={switchRef}
+          />
         </div>
-      )}
 
-      <div
-        style={{
-          marginLeft: menuVisible ? "220px" : "0",
-          padding: "20px",
-          width: "100%",
-          paddingTop: "50px"
-        }}
-      >
-        {/* <h1 style={{ paddingTop: "50px" }}></h1> */}
-        {selectedCategory === "quiz-particulas" ? (
-          <Quiz /> // Renderiza el componente Quiz
-        ) : (
-          <FlipCards selectedCategory={selectedCategory} /> // Renderiza FlipCards
+        {/* SideMenu */}
+        {menuVisible && (
+          <div ref={menuRef}>
+            <SideMenu onOptionClick={handleCloseMenu} />
+          </div>
         )}
+
+        <div
+          style={{
+            marginLeft: menuVisible ? "220px" : "0",
+            padding: "20px",
+            width: "100%",
+          }}
+        >
+          <Routes>
+            <Route path="/" element={<h1 style={{ paddingTop: "50px" }}>Bienvenido a Japonés Quiz</h1>} />
+            <Route path="/flipcards/:category" element={<FlipCards />} />
+            <Route path="/quiz-particulas" element={<Quiz />} />
+          </Routes>
+        </div>
       </div>
-    </div>
+    </Router>
   );
 }
 

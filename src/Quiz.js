@@ -50,13 +50,13 @@ const Quiz = () => {
   };
 
   if (questions.length === 0) {
-    return <p>Cargando preguntas...</p>;
+    return <p style={{ paddingTop: "30px" }}>Cargando preguntas...</p>;
   }
 
   const currentQuestion = questions[currentQuestionIndex];
 
   return (
-    <div>
+    <div style={{ paddingTop: "30px" }}>
       <h2>Pregunta {currentQuestionIndex + 1} de {questions.length}</h2>
       <p>{currentQuestion.frase}</p>
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
